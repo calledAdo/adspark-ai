@@ -1,13 +1,13 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   BarChart, Bar, PieChart, Pie, Cell,
 } from "recharts";
 import {
-  TrendingUp, Eye, MousePointerClick, DollarSign, Globe2, Bot, Send,
+  TrendingUp, Eye, MousePointerClick, DollarSign, Globe2, ExternalLink,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { AgentChatFab } from "@/components/AgentChatFab";
 
 const impressionData = [
   { day: "Mon", impressions: 12400, clicks: 320 },
@@ -50,12 +50,15 @@ const metrics = [
   { label: "Spent", value: "1,385 CKB", change: "27.7%", icon: DollarSign, color: "text-warning" },
 ];
 
-export default function AdvertiserDashboard() {
-  const [agentInput, setAgentInput] = useState("");
+const placements = [
+  { id: "header-banner-techblog", name: "Header Banner", publisher: "TechBlog.io", spent: 520, impressions: "45.2K", ctr: "2.96%", status: "active" },
+  { id: "sidebar-cryptonews", name: "Sidebar 300x250", publisher: "CryptoNews Daily", spent: 380, impressions: "32.1K", ctr: "2.77%", status: "active" },
+  { id: "in-content-defiworld", name: "In-Content Native", publisher: "DeFi World", spent: 485, impressions: "40.0K", ctr: "2.85%", status: "active" },
+];
 
+export default function AdvertiserDashboard() {
   return (
-    <div className="p-6 space-y-6 max-w-7xl mx-auto">
-      {/* Title */}
+    <div className="p-6 space-y-6 max-w-7xl mx-auto pb-24">
       <div>
         <h1 className="text-2xl font-bold">Campaign Dashboard</h1>
         <p className="text-sm text-muted-foreground mt-1">DeFi Wallet App • Buyer Agent <span className="text-primary font-mono">AG-0x7f3a</span></p>
@@ -83,9 +86,8 @@ export default function AdvertiserDashboard() {
         ))}
       </div>
 
-      {/* Charts Row */}
+      {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Impressions & Clicks */}
         <div className="lg:col-span-2 glass rounded-xl p-5">
           <h2 className="text-sm font-medium mb-4 text-muted-foreground">Impressions & Clicks</h2>
           <div className="h-64">
@@ -104,15 +106,7 @@ export default function AdvertiserDashboard() {
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(230, 20%, 18%)" />
                 <XAxis dataKey="day" stroke="hsl(215, 20%, 55%)" fontSize={12} />
                 <YAxis stroke="hsl(215, 20%, 55%)" fontSize={12} />
-                <Tooltip
-                  contentStyle={{
-                    background: "hsl(230, 25%, 12%)",
-                    border: "1px solid hsl(230, 20%, 20%)",
-                    borderRadius: "8px",
-                    color: "hsl(210, 40%, 93%)",
-                    fontSize: 12,
-                  }}
-                />
+                <Tooltip contentStyle={{ background: "hsl(230, 25%, 12%)", border: "1px solid hsl(230, 20%, 20%)", borderRadius: "8px", color: "hsl(210, 40%, 93%)", fontSize: 12 }} />
                 <Area type="monotone" dataKey="impressions" stroke="hsl(185, 80%, 55%)" fill="url(#gradCyan)" strokeWidth={2} />
                 <Area type="monotone" dataKey="clicks" stroke="hsl(270, 60%, 60%)" fill="url(#gradPurple)" strokeWidth={2} />
               </AreaChart>
@@ -120,7 +114,6 @@ export default function AdvertiserDashboard() {
           </div>
         </div>
 
-        {/* Geo Distribution */}
         <div className="glass rounded-xl p-5">
           <h2 className="text-sm font-medium mb-4 text-muted-foreground flex items-center gap-2">
             <Globe2 className="h-4 w-4" /> Geo Distribution
@@ -129,19 +122,9 @@ export default function AdvertiserDashboard() {
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie data={geoData} cx="50%" cy="50%" innerRadius={50} outerRadius={75} dataKey="value" stroke="none">
-                  {geoData.map((_, i) => (
-                    <Cell key={i} fill={GEO_COLORS[i]} />
-                  ))}
+                  {geoData.map((_, i) => <Cell key={i} fill={GEO_COLORS[i]} />)}
                 </Pie>
-                <Tooltip
-                  contentStyle={{
-                    background: "hsl(230, 25%, 12%)",
-                    border: "1px solid hsl(230, 20%, 20%)",
-                    borderRadius: "8px",
-                    color: "hsl(210, 40%, 93%)",
-                    fontSize: 12,
-                  }}
-                />
+                <Tooltip contentStyle={{ background: "hsl(230, 25%, 12%)", border: "1px solid hsl(230, 20%, 20%)", borderRadius: "8px", color: "hsl(210, 40%, 93%)", fontSize: 12 }} />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -156,8 +139,34 @@ export default function AdvertiserDashboard() {
         </div>
       </div>
 
-      {/* Budget + Agent Command */}
+      {/* Placements + Budget */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* Active Placements */}
+        <div className="glass rounded-xl p-5">
+          <h2 className="text-sm font-medium mb-4 text-muted-foreground">Active Placements</h2>
+          <div className="space-y-3">
+            {placements.map((p) => (
+              <Link
+                key={p.id}
+                to={`/advertiser/placement/${p.id}`}
+                className="flex items-center justify-between p-3 rounded-lg bg-background/40 border border-border/30 hover:border-primary/40 transition-colors group cursor-pointer"
+              >
+                <div>
+                  <p className="text-sm font-medium group-hover:text-primary transition-colors">{p.name}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{p.publisher}</p>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="text-right">
+                    <p className="text-xs text-muted-foreground">{p.impressions} imp</p>
+                    <p className="text-xs text-warning">{p.spent} CKB</p>
+                  </div>
+                  <ExternalLink className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary transition-colors" />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
         {/* Budget */}
         <div className="glass rounded-xl p-5">
           <h2 className="text-sm font-medium mb-4 text-muted-foreground">Daily Spend (CKB)</h2>
@@ -167,58 +176,21 @@ export default function AdvertiserDashboard() {
                 <CartesianGrid strokeDasharray="3 3" stroke="hsl(230, 20%, 18%)" />
                 <XAxis dataKey="day" stroke="hsl(215, 20%, 55%)" fontSize={12} />
                 <YAxis stroke="hsl(215, 20%, 55%)" fontSize={12} />
-                <Tooltip
-                  contentStyle={{
-                    background: "hsl(230, 25%, 12%)",
-                    border: "1px solid hsl(230, 20%, 20%)",
-                    borderRadius: "8px",
-                    color: "hsl(210, 40%, 93%)",
-                    fontSize: 12,
-                  }}
-                />
+                <Tooltip contentStyle={{ background: "hsl(230, 25%, 12%)", border: "1px solid hsl(230, 20%, 20%)", borderRadius: "8px", color: "hsl(210, 40%, 93%)", fontSize: 12 }} />
                 <Bar dataKey="spent" fill="hsl(185, 80%, 55%)" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
-
-        {/* Agent Command Center */}
-        <div className="glass rounded-xl p-5 flex flex-col">
-          <div className="flex items-center gap-2 mb-4">
-            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/30 flex items-center justify-center">
-              <Bot className="h-4 w-4 text-primary" />
-            </div>
-            <div>
-              <h2 className="text-sm font-medium">Agent Command Center</h2>
-              <p className="text-xs text-muted-foreground">Talk to your Buyer Agent</p>
-            </div>
-            <span className="ml-auto text-xs px-2 py-0.5 rounded-full bg-success/10 text-success border border-success/20">
-              Online
-            </span>
-          </div>
-
-          <div className="flex-1 rounded-lg bg-background/40 p-3 space-y-3 mb-3 min-h-[120px] overflow-y-auto">
-            <div className="flex gap-2">
-              <Bot className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-              <p className="text-xs text-muted-foreground">
-                Campaign performing well. CTR is up 0.3% this week. I've auto-optimized bid prices for the EU region where CPC was 15% above target. Ready for instructions.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex gap-2">
-            <input
-              value={agentInput}
-              onChange={(e) => setAgentInput(e.target.value)}
-              placeholder="Command your agent..."
-              className="flex-1 bg-background/40 border border-border/50 rounded-lg px-3 py-2 text-sm outline-none focus:border-primary/50 text-foreground placeholder:text-muted-foreground"
-            />
-            <Button size="icon" className="h-9 w-9 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90">
-              <Send className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
       </div>
+
+      {/* Floating Agent Chat */}
+      <AgentChatFab
+        agentName="Buyer Agent"
+        agentId="AG-0x7f3a"
+        agentType="buyer"
+        initialMessage="Campaign performing well. CTR is up 0.3% this week. I've auto-optimized bid prices for the EU region where CPC was 15% above target. Ready for instructions."
+      />
     </div>
   );
 }

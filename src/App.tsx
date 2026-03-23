@@ -7,8 +7,11 @@ import { AppLayout } from "@/components/AppLayout";
 import Index from "./pages/Index";
 import AdvertiserOnboard from "./pages/AdvertiserOnboard";
 import AdvertiserDashboard from "./pages/AdvertiserDashboard";
+import AdvertiserPlacementDetail from "./pages/AdvertiserPlacementDetail";
 import PublisherOnboard from "./pages/PublisherOnboard";
 import PublisherDashboard from "./pages/PublisherDashboard";
+import PublisherPlacementDetail from "./pages/PublisherPlacementDetail";
+import PublisherNewPlacement from "./pages/PublisherNewPlacement";
 import WalletPage from "./pages/WalletPage";
 import NotFound from "./pages/NotFound";
 
@@ -25,8 +28,11 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/advertiser/onboard" element={<AdvertiserOnboard />} />
             <Route path="/advertiser/dashboard" element={<AdvertiserDashboard />} />
+            <Route path="/advertiser/placement/:placementId" element={<AdvertiserPlacementDetail />} />
             <Route path="/publisher/onboard" element={<PublisherOnboard />} />
             <Route path="/publisher/dashboard" element={<PublisherDashboard />} />
+            <Route path="/publisher/placement/:placementId" element={<PublisherPlacementDetail />} />
+            <Route path="/publisher/new-placement" element={<PublisherNewPlacement />} />
             <Route path="/wallet" element={<WalletPage />} />
           </Route>
           <Route path="*" element={<NotFound />} />
